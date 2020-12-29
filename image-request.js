@@ -57,8 +57,10 @@ class ImageRequest {
             }
 
             this.requestType = this.parseRequestType(event);
-            this.bucket = this.parseImageBucket(event, this.requestType);
-            this.key = this.parseImageKey(event, this.requestType);
+            this.bucket = this.parseImageBucketNew(event, this.requestType);
+            console.log('new bucket: '+ this.bucket);
+            this.key = this.parseImageKeyNew(event, this.requestType);
+            console.log('new key: '+ this.key)
             this.edits = this.parseImageEdits(event, this.requestType);
             this.originalImage = await this.getOriginalImage(this.bucket, this.key);
             this.headers = this.parseImageHeaders(event, this.requestType);
@@ -191,6 +193,24 @@ class ImageRequest {
                 message: 'The bucket you specified could not be found. Please check the spelling of the bucket name in your request.'
             });
         }
+    }
+
+    /**
+     * 新方法获取bucket，类似传入/bucket/key
+     * @param {string} path 
+     */
+    parseImageBucketNew(path) {
+        const arr = path.split('/');
+        return arr[1];
+    }
+
+    /**
+     * 新方法获取key，类似传入/bucket/key
+     * @param {string} path 
+     */
+    parseImageKeyNew(path) {
+        const arr = path.split('/');
+        return arr[2];
     }
 
     /**
